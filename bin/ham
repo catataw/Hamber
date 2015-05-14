@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+'use strict';
+
+// Provide a title to the process in `ps`
+process.title = 'sane';
+
+var path = require('path');
+var resolve = require('resolve');
+require('babel/polyfill');
+
+resolve('sane-cli', {
+  basedir: process.cwd()
+}, function (error, localCliPath){
+  var cli;
+  if (error) {
+    //require global sane-cli
+    cli = require(path.join('..', 'lib', 'cli'));
+  } else {
+    cli = require(path.join(localCliPath, '..', '..', 'lib', 'cli'));
+  }
+  cli(process.argv);
+});
